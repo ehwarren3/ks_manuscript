@@ -43,6 +43,11 @@ _TCR1_COLOR = "#D4A017"  # golden yellow for ORF6-Specific TCR 1
 _TCR2_COLOR = "#008080"  # teal for ORF6-Specific TCR 2
 _HLA_ALLELE = "B*45:01"
 
+# Horizontal position of the panel letters (B, C), in axes-fraction units.
+# 0.0 = at the y-axis; negative = out in the left margin, clear of the y-axis
+# label and tick labels. Make more negative to push the letters further out.
+_PANEL_LETTER_X = -0.06
+
 # ---------------------------------------------------------------------------
 # CSV loading
 # ---------------------------------------------------------------------------
@@ -191,14 +196,16 @@ def render(out_dir: Path) -> Path:
     df_b = _load_panel_csv(_PANEL_CSV_DIR / "SpFigure3_PanelC.csv")
     _draw_grouped_bars(ax_b, df_b, _TCR1_COLOR,
                        hla_allele="TCR1", ylim=80)
-    ax_b.set_title("B", loc="left", fontweight="bold", fontsize=28)
+    ax_b.text(_PANEL_LETTER_X, 1.0, "B", transform=ax_b.transAxes,
+              fontweight="bold", fontsize=76, ha="right", va="bottom")
 
     # Panel C — ORF6 segment mapping (ORF6-Specific TCR 2)
     ax_c = fig.add_subplot(gs[0, 1])
     df_c = _load_panel_csv(_PANEL_CSV_DIR / "SpFigure3_PanelD.csv")
     _draw_grouped_bars(ax_c, df_c, _TCR2_COLOR,
                        hla_allele="TCR2", ylim=80)
-    ax_c.set_title("C", loc="left", fontweight="bold", fontsize=28)
+    ax_c.text(_PANEL_LETTER_X, 1.0, "C", transform=ax_c.transAxes,
+              fontweight="bold", fontsize=76, ha="right", va="bottom")
 
     # Shared legend with mathtext subscripts for ORF6 residue range
     _tcr1_label = (
